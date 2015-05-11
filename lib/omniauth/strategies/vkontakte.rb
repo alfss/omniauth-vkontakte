@@ -65,9 +65,9 @@ module OmniAuth
 
           log :info, "VK: access_token.get with params: #{params}"
           
-          result = access_token.get('/method/users.get', :params => params).parsed
+          parsed = access_token.get('/method/users.get', :params => params).parsed
           
-          log :info, "VK: result: #{result}"
+          log :info, "VK: result: #{parsed}"
           log :info, "VK: access_token: #{access_token.inspect}"
           
           if error = parsed['error']
