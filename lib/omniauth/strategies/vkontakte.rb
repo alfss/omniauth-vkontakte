@@ -15,7 +15,7 @@ module OmniAuth
     class Vkontakte < OmniAuth::Strategies::OAuth2
       class NoRawData < StandardError; end
 
-      API_VERSION = '5.2'
+      API_VERSION = '5.31'
 
       DEFAULT_SCOPE = ''
 
@@ -29,7 +29,7 @@ module OmniAuth
 
       option :authorize_options, [:scope, :display]
 
-      uid { raw_info['id'].to_s }
+      uid { (raw_info['id'] || raw_info['uid']).to_s }
 
       # https://github.com/intridea/omniauth/wiki/Auth-Hash-Schema
       info do
@@ -63,8 +63,19 @@ module OmniAuth
             :v        => API_VERSION,
           }
 
-          result = access_token.get('/method/users.get', :params => params).parsed["response"]
+          log :info, "VK: access_token.get with params: #{params}"
+          
+          result = access_token.get('/method/users.get', :params => params).parsed
+          
+          log :info, "VK: result: #{result}"
+          log :info, "VK: access_token: #{access_token.inspect}"
+          
+          if error = parsed['error']
+            raise CallbackError.new(:validation_required, error['error_msg'], error['redirect_uri'])
+          end
 
+          result = parsed["response"]
+          
           raise NoRawData, result unless (result.is_a?(Array) and result.first)
           result.first
         end
