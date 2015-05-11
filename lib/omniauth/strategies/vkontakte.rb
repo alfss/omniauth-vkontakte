@@ -71,6 +71,7 @@ module OmniAuth
           log :info, "VK: access_token: #{access_token.inspect}"
           
           if error = parsed['error']
+            log :info, "VK: error: #{error['error_msg']}, error['redirect_uri']"
             raise CallbackError.new(:validation_required, error['error_msg'], error['redirect_uri'])
           end
 
