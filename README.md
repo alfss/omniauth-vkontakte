@@ -21,6 +21,7 @@ You can configure several options, which you pass in to the `provider` method vi
 * `image_size`: defines the size of the user's image. Valid options include `mini`(50x50), `bigger`(100x100), `bigger_x2`(200x200), `original`(200x*) and `original_x2`(400x*). Default is `mini`.
 * `info_fields`: specify which fields should be added to AuthHash when
   getting the user's info. Value should be a comma-separated string as per http://vk.com/dev/fields.
+* `enable_logging`: enable logging (default: `false`)
 
 Here's an example of a possible configuration:
 
@@ -31,7 +32,8 @@ use OmniAuth::Builder do
       :scope => 'friends,audio,photos',
       :display => 'popup',
       :lang => 'en',
-      :image_size => 'original'
+      :image_size => 'original',
+      :enable_logging => 'true'
     }
 end
 ```
@@ -81,6 +83,7 @@ The precise information available may depend on the permissions which you reques
 
 Tested with the following Ruby versions:
 
+- MRI 2.1.x
 - MRI 2.0.0
 - MRI 1.9.3
 
