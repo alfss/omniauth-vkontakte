@@ -63,15 +63,15 @@ module OmniAuth
             :v        => API_VERSION,
           }
 
-          log :info, "VK: access_token.get with params: #{params}"
+          log :info, "VK: access_token.get with params: #{params}" if enable_logging?
           
           parsed = access_token.get('/method/users.get', :params => params).parsed
           
-          log :info, "VK: result: #{parsed}"
-          log :info, "VK: access_token: #{access_token.inspect}"
+          log :info, "VK: result: #{parsed}" if enable_logging?
+          log :info, "VK: access_token: #{access_token.inspect}" if enable_logging?
           
           if error = parsed['error']
-            log :info, "VK: error: #{error['error_msg']}, error['redirect_uri']"
+            log :info, "VK: error: #{error['error_msg']}, error['redirect_uri']" if enable_logging?
             raise CallbackError.new(:validation_required, error['error_msg'], error['redirect_uri'])
           end
 
@@ -105,6 +105,10 @@ module OmniAuth
       end
 
       private
+      
+      def enable_logging?
+        options[:enable_logging] || false
+      end
 
       def info_options
         # http://vk.com/dev/fields
